@@ -8,6 +8,23 @@ const WHATSAPP_URL = 'https://wa.me/message/JEQTCLRQLN5SF1';
 // Encode les espaces dans les chemins de photos
 const photoUrl = (path: string) => path.split('/').map((s, i) => i === 0 ? s : encodeURIComponent(s)).join('/');
 
+const partners = [
+  { name: "eedomus",        logo: "https://logo.clearbit.com/eedomus.com" },
+  { name: "Home Assistant", logo: "https://logo.clearbit.com/home-assistant.io" },
+  { name: "Doorbird",       logo: "https://logo.clearbit.com/doorbird.com" },
+  { name: "Nuki",           logo: "https://logo.clearbit.com/nuki.io" },
+  { name: "Somfy",          logo: "https://logo.clearbit.com/somfy.com" },
+  { name: "Basalte",        logo: "https://logo.clearbit.com/basalte.be" },
+  { name: "Focal",          logo: "https://logo.clearbit.com/focal.com" },
+  { name: "Google Home",    logo: "https://logo.clearbit.com/home.google.com" },
+  { name: "Sonos",          logo: "https://logo.clearbit.com/sonos.com" },
+  { name: "Shelly",         logo: "https://logo.clearbit.com/shelly.cloud" },
+  { name: "Fibaro",         logo: "https://logo.clearbit.com/fibaro.com" },
+  { name: "Philips Hue",    logo: "https://logo.clearbit.com/philips-hue.com" },
+  { name: "Netatmo",        logo: "https://logo.clearbit.com/netatmo.com" },
+  { name: "Ubiquiti",       logo: "https://logo.clearbit.com/ui.com" },
+];
+
 const portfolioProjects = [
   {
     title: "Appartement Val de Marne",
@@ -234,6 +251,37 @@ function App() {
                 <div className="text-deera-purple mb-4">{service.icon}</div>
                 <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
                 <p className="text-gray-600">{service.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="py-16 bg-gray-50 overflow-hidden">
+        <div className="container mx-auto px-4 mb-10">
+          <h2 className="text-3xl font-bold text-center mb-2">Nos Marques Partenaires</h2>
+          <p className="text-center text-gray-500">Les meilleures technologies pour votre maison intelligente</p>
+        </div>
+        {/* Infinite marquee */}
+        <div className="relative overflow-hidden">
+          {/* Fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none" />
+          {/* Track — duplicate logos for seamless loop */}
+          <div className="animate-marquee flex items-center gap-10 w-max">
+            {[...partners, ...partners].map((p, i) => (
+              <div
+                key={i}
+                className="flex flex-col items-center gap-2 bg-white rounded-xl px-6 py-4 shadow-sm hover:shadow-md transition-shadow flex-shrink-0 w-36"
+              >
+                <img
+                  src={p.logo}
+                  alt={p.name}
+                  className="h-10 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+                <span className="text-xs font-medium text-gray-500 text-center">{p.name}</span>
               </div>
             ))}
           </div>
