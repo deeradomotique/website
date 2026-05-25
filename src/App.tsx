@@ -293,11 +293,33 @@ function App() {
         </div>
       </footer>
 
+      {/* Floating WhatsApp Button */}
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 group flex items-center gap-3"
+        aria-label="Contactez-nous sur WhatsApp"
+      >
+        {/* Tooltip */}
+        <span className="hidden group-hover:flex items-center bg-white text-gray-800 text-sm font-medium px-4 py-2 rounded-full shadow-lg whitespace-nowrap border border-gray-100 transition-all">
+          Contactez-nous sur WhatsApp
+        </span>
+        {/* Bouton */}
+        <div className="relative">
+          {/* Pulse ring */}
+          <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-40 animate-ping" />
+          <div className="relative bg-[#25D366] hover:bg-[#1ebe5d] active:bg-[#17a852] transition-colors w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl">
+            <WhatsAppIcon className="w-7 h-7 text-white" />
+          </div>
+        </div>
+      </a>
+
       {/* Scroll to Top Button */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-deera-purple text-white p-3 rounded-full shadow-lg hover:bg-opacity-90 transition-colors"
+          className="fixed bottom-24 right-6 z-50 bg-deera-purple text-white p-3 rounded-full shadow-lg hover:bg-opacity-90 transition-colors"
         >
           <ChevronUp className="w-6 h-6" />
         </button>
