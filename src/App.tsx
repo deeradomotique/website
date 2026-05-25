@@ -9,20 +9,20 @@ const WHATSAPP_URL = 'https://wa.me/message/JEQTCLRQLN5SF1';
 const photoUrl = (path: string) => path.split('/').map((s, i) => i === 0 ? s : encodeURIComponent(s)).join('/');
 
 const partners = [
-  { name: "eedomus",        logo: "https://logo.clearbit.com/eedomus.com" },
-  { name: "Home Assistant", logo: "https://logo.clearbit.com/home-assistant.io" },
-  { name: "Doorbird",       logo: "https://logo.clearbit.com/doorbird.com" },
-  { name: "Nuki",           logo: "https://logo.clearbit.com/nuki.io" },
-  { name: "Somfy",          logo: "https://logo.clearbit.com/somfy.com" },
-  { name: "Basalte",        logo: "https://logo.clearbit.com/basalte.be" },
-  { name: "Focal",          logo: "https://logo.clearbit.com/focal.com" },
-  { name: "Google Home",    logo: "https://logo.clearbit.com/home.google.com" },
-  { name: "Sonos",          logo: "https://logo.clearbit.com/sonos.com" },
-  { name: "Shelly",         logo: "https://logo.clearbit.com/shelly.cloud" },
-  { name: "Fibaro",         logo: "https://logo.clearbit.com/fibaro.com" },
-  { name: "Philips Hue",    logo: "https://logo.clearbit.com/philips-hue.com" },
-  { name: "Netatmo",        logo: "https://logo.clearbit.com/netatmo.com" },
-  { name: "Ubiquiti",       logo: "https://logo.clearbit.com/ui.com" },
+  { name: "eedomus",        logo: "/logos/eedomus.png" },
+  { name: "Home Assistant", logo: "/logos/homeassistant.svg" },
+  { name: "Doorbird",       logo: "/logos/doorbird.png" },
+  { name: "Nuki",           logo: "/logos/nuki.svg" },
+  { name: "Somfy",          logo: "/logos/somfy.svg" },
+  { name: "Basalte",        logo: "/logos/basalte.svg" },
+  { name: "Focal",          logo: "/logos/focal.svg" },
+  { name: "Google Home",    logo: "/logos/google-home.svg" },
+  { name: "Sonos",          logo: "/logos/sonos.svg" },
+  { name: "Shelly",         logo: "/logos/shelly.svg" },
+  { name: "Fibaro",         logo: "/logos/fibaro.png" },
+  { name: "Philips Hue",    logo: "/logos/philipshue.svg" },
+  { name: "Netatmo",        logo: "/logos/netatmo.svg" },
+  { name: "Ubiquiti",       logo: "/logos/ubiquiti.svg" },
 ];
 
 const portfolioProjects = [
