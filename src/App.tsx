@@ -1,11 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, X, ChevronUp, Home, Zap, Shield, Thermometer, Phone, Star } from 'lucide-react';
+import { Menu, X, ChevronUp, Home, Zap, Shield, Thermometer, Phone, Star, CheckCircle, AlertCircle } from 'lucide-react';
 import { Testimonial, Service } from './types';
 import Logo from './components/Logo';
+
+const FORMSPREE_ID = 'xvzybepy';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus('loading');
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ name: formData.name, email: formData.email, phone: formData.phone, message: formData.message }),
+      });
+      if (res.ok) {
+        setFormStatus('success');
+        setFormData({ name: '', email: '', phone: '', message: '' });
+      } else {
+        setFormStatus('error');
+      }
+    } catch {
+      setFormStatus('error');
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -205,46 +233,78 @@ function App() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Contactez-nous</h2>
           <div className="max-w-2xl mx-auto">
-            <form className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nom</label>
-                <input
-                  type="text"
-                  id="name"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deera-purple focus:ring focus:ring-deera-purple focus:ring-opacity-50"
-                />
+            {formStatus === 'success' ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
+                <h3 className="text-2xl font-semibold mb-2">Message envoyé !</h3>
+                <p className="text-gray-600 mb-6">Nous vous répondrons dans les plus brefs délais.</p>
+                <button
+                  onClick={() => setFormStatus('idle')}
+                  className="bg-deera-purple text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors"
+                >
+                  Envoyer un autre message
+                </button>
               </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deera-purple focus:ring focus:ring-deera-purple focus:ring-opacity-50"
-                />
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Téléphone</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deera-purple focus:ring focus:ring-deera-purple focus:ring-opacity-50"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deera-purple focus:ring focus:ring-deera-purple focus:ring-opacity-50"
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-deera-purple text-white px-6 py-3 rounded-full hover:bg-opacity-90 transition-colors"
-              >
-                Envoyer
-              </button>
-            </form>
+            ) : (
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                {formStatus === 'error' && (
+                  <div className="flex items-center gap-2 bg-red-50 text-red-700 border border-red-200 rounded-md px-4 py-3">
+                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                    <span>Une erreur s'est produite. Veuillez réessayer ou nous contacter directement.</span>
+                  </div>
+                )}
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nom</label>
+                  <input
+                    type="text"
+                    id="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deera-purple focus:ring focus:ring-deera-purple focus:ring-opacity-50"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deera-purple focus:ring focus:ring-deera-purple focus:ring-opacity-50"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Téléphone</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deera-purple focus:ring focus:ring-deera-purple focus:ring-opacity-50"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
+                  <textarea
+                    id="message"
+                    rows={4}
+                    required
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deera-purple focus:ring focus:ring-deera-purple focus:ring-opacity-50"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  disabled={formStatus === 'loading'}
+                  className="w-full bg-deera-purple text-white px-6 py-3 rounded-full hover:bg-opacity-90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {formStatus === 'loading' ? 'Envoi en cours…' : 'Envoyer'}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </section>
