@@ -3,6 +3,8 @@ import { Menu, X, ChevronUp, Home, Zap, Shield, Thermometer, Phone, Star, CheckC
 import { Testimonial, Service } from './types';
 import Logo from './components/Logo';
 
+const FORMSPREE_ID = 'xvzybepy';
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -16,15 +18,11 @@ function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus('loading');
-    const encode = (data: Record<string, string>) =>
-      Object.entries(data)
-        .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
-        .join('&');
     try {
-      const res = await fetch('/', {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode({ 'form-name': 'contact', ...formData }),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ name: formData.name, email: formData.email, phone: formData.phone, message: formData.message }),
       });
       if (res.ok) {
         setFormStatus('success');
