@@ -3,8 +3,6 @@ import { Menu, X, ChevronUp, Home, Zap, Shield, Thermometer, Phone, Star, CheckC
 import { Testimonial, Service } from './types';
 import Logo from './components/Logo';
 
-const FORMSPREE_ID = 'xvzybepy';
-
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -12,17 +10,21 @@ function App() {
   const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus('loading');
+    const encode = (data: Record<string, string>) =>
+      Object.entries(data)
+        .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+        .join('&');
     try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      const res = await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ name: formData.name, email: formData.email, phone: formData.phone, message: formData.message }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode({ 'form-name': 'contact', ...formData }),
       });
       if (res.ok) {
         setFormStatus('success');
@@ -246,7 +248,8 @@ function App() {
                 </button>
               </div>
             ) : (
-              <form className="space-y-6" onSubmit={handleSubmit}>
+              <form name="contact" data-netlify="true" className="space-y-6" onSubmit={handleSubmit}>
+                <input type="hidden" name="form-name" value="contact" />
                 {formStatus === 'error' && (
                   <div className="flex items-center gap-2 bg-red-50 text-red-700 border border-red-200 rounded-md px-4 py-3">
                     <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -258,6 +261,7 @@ function App() {
                   <input
                     type="text"
                     id="name"
+                    name="name"
                     required
                     value={formData.name}
                     onChange={handleChange}
@@ -269,6 +273,7 @@ function App() {
                   <input
                     type="email"
                     id="email"
+                    name="email"
                     required
                     value={formData.email}
                     onChange={handleChange}
@@ -280,6 +285,7 @@ function App() {
                   <input
                     type="tel"
                     id="phone"
+                    name="phone"
                     value={formData.phone}
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deera-purple focus:ring focus:ring-deera-purple focus:ring-opacity-50"
@@ -289,6 +295,7 @@ function App() {
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
                   <textarea
                     id="message"
+                    name="message"
                     rows={4}
                     required
                     value={formData.message}
