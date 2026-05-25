@@ -234,9 +234,12 @@ function App() {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6">DEERA - Votre Maison Intelligente</h1>
             <p className="text-xl mb-8">L'intelligence au service de votre confort</p>
-            <button className="bg-white text-deera-purple px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors">
+            <a
+              href="#services"
+              className="inline-block bg-white text-deera-purple px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
               Découvrir nos Solutions
-            </button>
+            </a>
           </div>
         </div>
       </section>
