@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, X, ChevronUp, Home, Zap, Shield, Thermometer, Phone, Star } from 'lucide-react';
+import { Menu, X, ChevronUp, Home, Zap, Shield, Thermometer, Phone, Star, Sun, Moon, Plane } from 'lucide-react';
 import { Testimonial, Service } from './types';
 import Logo from './components/Logo';
 
 const WHATSAPP_URL = 'https://wa.me/message/JEQTCLRQLN5SF1';
+const WHATSAPP_CONTACT_URL = 'https://wa.me/33769537773?text=Bonjour%2C%20je%20souhaite%20en%20savoir%20plus%20sur%20vos%20services%20domotique';
 
 // Encode les espaces dans les chemins de photos
 const photoUrl = (path: string) => path.split('/').map((s, i) => i === 0 ? s : encodeURIComponent(s)).join('/');
@@ -118,28 +119,28 @@ function App() {
   const services: Service[] = [
     {
       icon: <Home className="w-8 h-8" />,
-      title: "Domotique Résidentielle",
-      description: "Solutions intelligentes pour votre maison"
+      title: "Votre maison s'adapte à vous",
+      description: "Lumières, volets, chauffage... tout se pilote ensemble, simplement."
     },
     {
       icon: <Zap className="w-8 h-8" />,
-      title: "Gestion Énergétique",
-      description: "Optimisez votre consommation d'énergie"
+      title: "Jusqu'à 30% d'économies sur vos factures",
+      description: "L'énergie ne chauffe plus quand personne n'est là. Les économies arrivent toutes seules."
     },
     {
       icon: <Shield className="w-8 h-8" />,
-      title: "Sécurité Connectée",
-      description: "Protection intelligente 24/7"
+      title: "Dormez tranquille, même en vacances",
+      description: "Alertes en temps réel, simulation de présence, caméras connectées. Votre maison veille."
     },
     {
       icon: <Thermometer className="w-8 h-8" />,
-      title: "Contrôle Climatique",
-      description: "Température idéale en tout temps"
+      title: "La bonne température, toujours",
+      description: "Chaud quand vous rentrez, frais quand il le faut. Sans jamais y penser."
     },
     {
       icon: <Phone className="w-8 h-8" />,
-      title: "Contrôle à Distance",
-      description: "Pilotez votre maison où que vous soyez"
+      title: "Pilotez tout depuis votre téléphone",
+      description: "Un seul écran pour tout contrôler, où que vous soyez dans le monde."
     }
   ];
 
@@ -173,7 +174,7 @@ function App() {
             <div className="flex items-center">
               <Logo />
             </div>
-            
+
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
               <a href="#accueil" className="text-gray-700 hover:text-deera-purple">Accueil</a>
@@ -195,7 +196,7 @@ function App() {
             </a>
 
             {/* Mobile Menu Button */}
-            <button 
+            <button
               className="md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
@@ -232,14 +233,23 @@ function App() {
       <section id="accueil" className="pt-20 bg-gradient-to-br from-deera-purple to-deera-blue text-white">
         <div className="container mx-auto px-4 py-32">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6">DEERA - Votre Maison Intelligente</h1>
-            <p className="text-xl mb-8">L'intelligence au service de votre confort</p>
-            <a
-              href="#services"
-              className="inline-block bg-white text-deera-purple px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors"
-            >
-              Découvrir nos Solutions
-            </a>
+            <h1 className="text-5xl font-bold mb-6">Votre maison qui vous simplifie la vie</h1>
+            <p className="text-xl mb-10">Lumières, chauffage, sécurité, volets... On automatise tout pour que vous n'y pensiez plus jamais.</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="#services"
+                className="inline-block bg-white text-deera-purple px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Découvrir nos Solutions
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white px-8 py-3 rounded-full text-lg font-semibold transition-colors"
+              >
+                <WhatsAppIcon className="w-5 h-5" />
+                Discutons de votre projet
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -287,6 +297,65 @@ function App() {
                 <span className="text-xs font-medium text-gray-500 text-center">{p.name}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Une journée avec DEERA */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4">Une journée avec DEERA</h2>
+          <p className="text-center text-gray-500 mb-14">Voici ce que votre maison fait pour vous, sans que vous n'ayez à lever le petit doigt.</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Matin */}
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-100">
+              <div className="bg-amber-400 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <Sun className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-1 text-amber-800">Matin</h3>
+              <p className="text-amber-700 text-sm leading-relaxed">
+                Les lumières s'allument progressivement. Le chauffage était déjà chaud avant votre réveil. Vous commencez la journée bien.
+              </p>
+            </div>
+            {/* Soir */}
+            <div className="bg-gradient-to-br from-deera-purple/5 to-deera-blue/5 rounded-2xl p-6 border border-deera-purple/10">
+              <div className="bg-deera-purple text-white rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <Home className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-1 text-deera-purple">Soir</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                En approchant de chez vous, les lumières s'allument automatiquement. L'ambiance du salon est déjà réglée à votre goût.
+              </p>
+            </div>
+            {/* Nuit */}
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-6 border border-slate-100">
+              <div className="bg-slate-600 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <Moon className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-1 text-slate-700">Nuit</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                La simulation de présence active, l'alarme se déclenche. Votre maison veille pendant que vous dormez.
+              </p>
+            </div>
+            {/* Vacances */}
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-100">
+              <div className="bg-emerald-500 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <Plane className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-1 text-emerald-800">Vacances</h3>
+              <p className="text-emerald-700 text-sm leading-relaxed">
+                Depuis l'autre bout du monde, vous voyez ce qui se passe chez vous. Alertes en temps réel, contrôle total à distance.
+              </p>
+            </div>
+          </div>
+          <div className="text-center mt-10">
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white px-8 py-3 rounded-full text-lg font-semibold transition-colors shadow-md hover:shadow-lg"
+            >
+              <WhatsAppIcon className="w-5 h-5" />
+              Discutons de votre projet
+            </a>
           </div>
         </div>
       </section>
@@ -393,33 +462,34 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-50">
+      <section id="contact" className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-4">Contactez-nous</h2>
-          <p className="text-center text-gray-500 mb-12">Discutons de votre projet directement sur WhatsApp</p>
-          <div className="max-w-md mx-auto">
-            <div className="bg-white rounded-2xl shadow-lg p-10 text-center">
+          <h2 className="text-3xl font-bold text-center mb-4">Discutons de votre projet</h2>
+          <p className="text-center text-gray-500 mb-12">Réponse rapide garantie — on vous rappelle dans la journée.</p>
+          <div className="max-w-lg mx-auto">
+            <div className="bg-gray-50 rounded-2xl shadow-lg p-10 text-center">
               {/* Icône WhatsApp */}
               <div className="flex justify-center mb-6">
                 <div className="bg-[#25D366] rounded-full p-5 shadow-md">
                   <WhatsAppIcon className="w-12 h-12 text-white" />
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Démarrez une conversation</h3>
-              <p className="text-gray-500 mb-8">
-                Réponse rapide garantie.<br />
-                Posez vos questions, demandez un devis,<br />
-                on s'occupe de tout.
+              <h3 className="text-2xl font-bold mb-3">Écrivez-nous sur WhatsApp</h3>
+              <p className="text-gray-500 mb-10">
+                Posez vos questions, décrivez votre maison,<br />
+                demandez un devis. On s'occupe de tout,<br />
+                sans jargon technique.
               </p>
               <a
-                href={WHATSAPP_URL}
+                href={WHATSAPP_CONTACT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] active:bg-[#17a852] text-white text-lg font-semibold px-8 py-4 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] active:bg-[#17a852] text-white text-xl font-bold px-10 py-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 w-full justify-center"
               >
-                <WhatsAppIcon className="w-6 h-6" />
-                Écrire sur WhatsApp
+                <WhatsAppIcon className="w-7 h-7" />
+                Discutons de votre projet
               </a>
+              <p className="text-gray-400 text-sm mt-4">Un message suffit. Pas d'engagement.</p>
             </div>
           </div>
         </div>
@@ -431,7 +501,7 @@ function App() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-xl font-bold mb-4">DEERA</h3>
-              <p className="text-gray-300">L'intelligence au service de votre confort</p>
+              <p className="text-gray-300">Votre maison qui vous simplifie la vie</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Navigation</h4>
