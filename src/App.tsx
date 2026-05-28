@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { Menu, X, ChevronUp, Home, Zap, Shield, Thermometer, Phone, Star, Sun, Moon, Plane, Bell, Camera } from 'lucide-react';
 import { Testimonial, Service } from './types';
 import Logo from './components/Logo';
@@ -107,6 +108,8 @@ function App() {
   const [lightbox, setLightbox] = useState<{ projectIndex: number; photoIndex: number } | null>(null);
   const [formData, setFormData] = useState({ nom: '', prenom: '', telephone: '', email: '', typeBien: '', projet: '' });
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [captchaDone, setCaptchaDone] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [lumiereOpt, setLumiereOpt] = useState<'base'|'echo'|'google'>('base');
   const [sonnetteOpt, setSonnetteOpt] = useState<'base'|'echo_show'|'nest_hub'>('base');
   const [showCallback, setShowCallback] = useState(false);
@@ -149,6 +152,8 @@ function App() {
       await fetch(GFORM_URL, { method: 'POST', mode: 'no-cors', body });
       setFormStatus('success');
       setFormData({ nom: '', prenom: '', telephone: '', email: '', typeBien: '', projet: '' });
+      recaptchaRef.current?.reset();
+      setCaptchaDone(false);
     } catch {
       setFormStatus('error');
     }
@@ -849,10 +854,19 @@ function App() {
                   {formStatus === 'error' && (
                     <p className="text-red-600 text-sm text-center">Une erreur s'est produite. Essayez via WhatsApp directement.</p>
                   )}
+                  <div className="flex justify-center">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'}
+                      onChange={(token) => setCaptchaDone(!!token)}
+                      onExpired={() => setCaptchaDone(false)}
+                      hl="fr"
+                    />
+                  </div>
                   <button
                     type="submit"
-                    disabled={formStatus === 'sending'}
-                    className="w-full bg-deera-purple hover:bg-deera-blue disabled:opacity-60 text-white text-lg font-semibold py-4 rounded-xl transition-colors shadow-md hover:shadow-lg"
+                    disabled={formStatus === 'sending' || !captchaDone}
+                    className="w-full bg-deera-purple hover:bg-deera-blue disabled:opacity-40 disabled:cursor-not-allowed text-white text-lg font-semibold py-4 rounded-xl transition-colors shadow-md hover:shadow-lg"
                   >
                     {formStatus === 'sending' ? 'Envoi en cours...' : 'Envoyer ma demande'}
                   </button>
