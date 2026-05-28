@@ -1,11 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, X, ChevronUp, Home, Zap, Shield, Thermometer, Phone, Star, Sun, Moon, Plane } from 'lucide-react';
+import { Menu, X, ChevronUp, Home, Zap, Shield, Thermometer, Phone, Star, Sun, Moon, Plane, Bell, Camera } from 'lucide-react';
 import { Testimonial, Service } from './types';
 import Logo from './components/Logo';
 
 const WHATSAPP_URL = 'https://wa.me/message/JEQTCLRQLN5SF1';
 const WHATSAPP_CONTACT_URL = 'https://wa.me/33769537773?text=Bonjour%2C%20je%20souhaite%20en%20savoir%20plus%20sur%20vos%20services%20domotique';
 const GFORM_URL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSc5f_64YB4PiQ_efHM3Cb1krIwb7CT9q6cZKIZFG4jX441tHw/formResponse';
+
+const STRIPE_LINKS = {
+  lumiere: {
+    base:   'https://buy.stripe.com/9B67sLd6d1IcfcsaOL9bO04',
+    echo:   'https://buy.stripe.com/fZucN56HP2Mg1lCe0X9bO05',
+    google: 'https://buy.stripe.com/28E8wPc29euYd4ke0X9bO06',
+  },
+  sonnette: {
+    base:      'https://buy.stripe.com/fZuaEX1nv3QkaWc3mj9bO07',
+    echo_show: 'https://buy.stripe.com/fZu7sLd6dcmQ8O43mj9bO08',
+    nest_hub:  'https://buy.stripe.com/aFa5kDgipfz23tK5ur9bO09',
+  },
+  camera_indoor:  'https://buy.stripe.com/dRmaEX1nvgD6e8of519bO0a',
+  camera_outdoor: 'https://buy.stripe.com/14A28r8PXfz25BSe0X9bO0b',
+  chauffage_1:    'https://buy.stripe.com/7sYeVdeahaeI0hy7Cz9bO0c',
+  chauffage_3:    'https://buy.stripe.com/bJe4gz9U14Uofcsf519bO0d',
+} as const;
+
+const LUMIERE_PRICES  = { base: 329, echo: 399, google: 399 } as const;
+const SONNETTE_PRICES = { base: 549, echo_show: 649, nest_hub: 649 } as const;
 
 // Encode les espaces dans les chemins de photos
 const photoUrl = (path: string) => path.split('/').map((s, i) => i === 0 ? s : encodeURIComponent(s)).join('/');
@@ -87,6 +107,8 @@ function App() {
   const [lightbox, setLightbox] = useState<{ projectIndex: number; photoIndex: number } | null>(null);
   const [formData, setFormData] = useState({ nom: '', prenom: '', telephone: '', email: '', typeBien: '', projet: '' });
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [lumiereOpt, setLumiereOpt] = useState<'base'|'echo'|'google'>('base');
+  const [sonnetteOpt, setSonnetteOpt] = useState<'base'|'echo_show'|'nest_hub'>('base');
   const [showCallback, setShowCallback] = useState(false);
   const [callbackData, setCallbackData] = useState({ prenom: '', telephone: '' });
   const [callbackStatus, setCallbackStatus] = useState<'idle' | 'sending' | 'success'>('idle');
@@ -229,6 +251,7 @@ function App() {
               <a href="#pourquoi-nous" className="text-gray-700 hover:text-deera-purple">Pourquoi Nous</a>
               <a href="#realisations" className="text-gray-700 hover:text-deera-purple">Réalisations</a>
               <a href="#temoignages" className="text-gray-700 hover:text-deera-purple">Témoignages</a>
+              <a href="#packs" className="text-gray-700 hover:text-deera-purple font-semibold">Nos Packs</a>
               <a href="#contact" className="text-gray-700 hover:text-deera-purple">Contact</a>
             </nav>
 
@@ -261,6 +284,7 @@ function App() {
               <a href="#pourquoi-nous" className="block text-gray-700 hover:text-deera-purple">Pourquoi Nous</a>
               <a href="#realisations" className="block text-gray-700 hover:text-deera-purple">Réalisations</a>
               <a href="#temoignages" className="block text-gray-700 hover:text-deera-purple">Témoignages</a>
+              <a href="#packs" className="block text-gray-700 hover:text-deera-purple font-semibold">Nos Packs</a>
               <a href="#contact" className="block text-gray-700 hover:text-deera-purple">Contact</a>
               <a
                 href={WHATSAPP_URL}
@@ -504,6 +528,198 @@ function App() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Packs Section */}
+      <section id="packs" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4">Nos Packs</h2>
+          <p className="text-center text-gray-500 mb-4">Matériel, installation et déplacement — tout inclus. Commandez en ligne en 1 clic.</p>
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-12 text-gray-400 text-sm">
+            <span>🍎 Apple Pay</span><span className="text-gray-200">|</span>
+            <span>🌐 Google Pay</span><span className="text-gray-200">|</span>
+            <span>🔗 Stripe Link</span><span className="text-gray-200">|</span>
+            <span>💳 Carte bancaire</span>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+
+            {/* Pack Lumière */}
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+              <div className="bg-gradient-to-r from-amber-400 to-orange-400 p-6 text-white">
+                <Zap className="w-8 h-8 mb-2" />
+                <h3 className="text-xl font-bold">Pack Lumière Connectée</h3>
+                <p className="text-amber-100 text-sm mt-1">3 points d'éclairage pilotables depuis votre téléphone</p>
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <div className="flex flex-col gap-2 mb-5">
+                  {([
+                    { key: 'base',   label: 'Sans assistant vocal', price: 329 },
+                    { key: 'echo',   label: '+ Echo Dot Alexa',     price: 399 },
+                    { key: 'google', label: '+ Google Home Mini',   price: 399 },
+                  ] as const).map(opt => (
+                    <button
+                      key={opt.key}
+                      onClick={() => setLumiereOpt(opt.key)}
+                      className={`flex justify-between items-center px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all text-left ${
+                        lumiereOpt === opt.key
+                          ? 'border-deera-purple bg-deera-purple/5 text-deera-purple'
+                          : 'border-gray-200 text-gray-600 hover:border-deera-purple/30'
+                      }`}
+                    >
+                      <span>{opt.label}</span>
+                      <span className="font-bold ml-4 shrink-0">{opt.price}€ TTC</span>
+                    </button>
+                  ))}
+                </div>
+                <ul className="text-sm text-gray-500 space-y-1 mb-3">
+                  <li>✓ Matériel inclus</li>
+                  <li>✓ Installation & configuration</li>
+                  <li>✓ Déplacement IDF inclus</li>
+                </ul>
+                <p className="text-xs text-gray-400 mb-5">
+                  ⚠️ Sans fil neutre à l'interrupteur ? Des ampoules dimmables sont nécessaires —{' '}
+                  <a href="#contact" className="text-deera-purple hover:underline">nous contacter</a>.
+                </p>
+                <div className="mt-auto">
+                  <div className="text-3xl font-bold text-gray-900 mb-4">
+                    {LUMIERE_PRICES[lumiereOpt]}€{' '}
+                    <span className="text-base font-normal text-gray-500">TTC</span>
+                  </div>
+                  <a
+                    href={STRIPE_LINKS.lumiere[lumiereOpt]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2 bg-deera-purple hover:bg-deera-blue text-white font-semibold py-3 rounded-xl transition-colors"
+                  >
+                    Commander →
+                  </a>
+                  <p className="text-xs text-center text-gray-400 mt-2">Apple Pay · Google Pay · Stripe Link</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Pack Sonnette */}
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+              <div className="bg-gradient-to-r from-deera-purple to-deera-blue p-6 text-white">
+                <Bell className="w-8 h-8 mb-2" />
+                <h3 className="text-xl font-bold">Pack Sonnette Connectée</h3>
+                <p className="text-purple-200 text-sm mt-1">Sonnette vidéo — voyez qui sonne depuis votre téléphone</p>
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <div className="flex flex-col gap-2 mb-5">
+                  {([
+                    { key: 'base',      label: 'Sans écran',            price: 549 },
+                    { key: 'echo_show', label: '+ Alexa Echo Show 5',   price: 649 },
+                    { key: 'nest_hub',  label: '+ Google Nest Hub',     price: 649 },
+                  ] as const).map(opt => (
+                    <button
+                      key={opt.key}
+                      onClick={() => setSonnetteOpt(opt.key)}
+                      className={`flex justify-between items-center px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all text-left ${
+                        sonnetteOpt === opt.key
+                          ? 'border-deera-purple bg-deera-purple/5 text-deera-purple'
+                          : 'border-gray-200 text-gray-600 hover:border-deera-purple/30'
+                      }`}
+                    >
+                      <span>{opt.label}</span>
+                      <span className="font-bold ml-4 shrink-0">{opt.price}€ TTC</span>
+                    </button>
+                  ))}
+                </div>
+                <ul className="text-sm text-gray-500 space-y-1 mb-5">
+                  <li>✓ Matériel inclus</li>
+                  <li>✓ Installation & configuration</li>
+                  <li>✓ Déplacement IDF inclus</li>
+                </ul>
+                <div className="mt-auto">
+                  <div className="text-3xl font-bold text-gray-900 mb-4">
+                    {SONNETTE_PRICES[sonnetteOpt]}€{' '}
+                    <span className="text-base font-normal text-gray-500">TTC</span>
+                  </div>
+                  <a
+                    href={STRIPE_LINKS.sonnette[sonnetteOpt]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2 bg-deera-purple hover:bg-deera-blue text-white font-semibold py-3 rounded-xl transition-colors"
+                  >
+                    Commander →
+                  </a>
+                  <p className="text-xs text-center text-gray-400 mt-2">Apple Pay · Google Pay · Stripe Link</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Pack Caméra */}
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+              <div className="bg-gradient-to-r from-slate-600 to-slate-800 p-6 text-white">
+                <Camera className="w-8 h-8 mb-2" />
+                <h3 className="text-xl font-bold">Pack Caméra Surveillance</h3>
+                <p className="text-slate-300 text-sm mt-1">Caméra Google Nest WiFi — intérieur ou extérieur</p>
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <div className="grid grid-cols-2 gap-3 mb-5">
+                  {[
+                    { label: 'Indoor WiFi', sub: 'Intérieur', price: 449, href: STRIPE_LINKS.camera_indoor },
+                    { label: 'Outdoor WiFi', sub: 'Extérieur', price: 549, href: STRIPE_LINKS.camera_outdoor },
+                  ].map(opt => (
+                    <div key={opt.label} className="border border-gray-200 rounded-xl p-4 text-center flex flex-col">
+                      <p className="text-sm font-semibold text-gray-800 mb-1">{opt.label}</p>
+                      <p className="text-xs text-gray-500 mb-3">{opt.sub}</p>
+                      <p className="text-2xl font-bold text-gray-900 mb-3">{opt.price}€ <span className="text-xs font-normal text-gray-400">TTC</span></p>
+                      <a href={opt.href} target="_blank" rel="noopener noreferrer"
+                        className="mt-auto block w-full bg-deera-purple hover:bg-deera-blue text-white text-sm font-semibold py-2 rounded-lg transition-colors">
+                        Commander
+                      </a>
+                    </div>
+                  ))}
+                </div>
+                <ul className="text-sm text-gray-500 space-y-1 mt-auto">
+                  <li>✓ Matériel inclus</li>
+                  <li>✓ Installation & configuration</li>
+                  <li>✓ Déplacement IDF inclus</li>
+                </ul>
+                <p className="text-xs text-center text-gray-400 mt-4">Apple Pay · Google Pay · Stripe Link</p>
+              </div>
+            </div>
+
+            {/* Pack Chauffage */}
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+              <div className="bg-gradient-to-r from-orange-500 to-red-500 p-6 text-white">
+                <Thermometer className="w-8 h-8 mb-2" />
+                <h3 className="text-xl font-bold">Pack Chauffage Connecté</h3>
+                <p className="text-orange-100 text-sm mt-1">Module Heatzy fil pilote — pilotez votre chauffage à distance</p>
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <div className="grid grid-cols-2 gap-3 mb-5">
+                  {[
+                    { label: '1 radiateur', sub: 'Chambre ou pièce', price: 349, href: STRIPE_LINKS.chauffage_1, badge: false },
+                    { label: 'Appartement', sub: '3 radiateurs',     price: 649, href: STRIPE_LINKS.chauffage_3, badge: true  },
+                  ].map(opt => (
+                    <div key={opt.label} className="relative border border-gray-200 rounded-xl p-4 text-center flex flex-col overflow-hidden">
+                      {opt.badge && (
+                        <span className="absolute top-2 right-2 bg-deera-purple text-white text-xs px-2 py-0.5 rounded-full">Populaire</span>
+                      )}
+                      <p className="text-sm font-semibold text-gray-800 mb-1">{opt.label}</p>
+                      <p className="text-xs text-gray-500 mb-3">{opt.sub}</p>
+                      <p className="text-2xl font-bold text-gray-900 mb-3">{opt.price}€ <span className="text-xs font-normal text-gray-400">TTC</span></p>
+                      <a href={opt.href} target="_blank" rel="noopener noreferrer"
+                        className="mt-auto block w-full bg-deera-purple hover:bg-deera-blue text-white text-sm font-semibold py-2 rounded-lg transition-colors">
+                        Commander
+                      </a>
+                    </div>
+                  ))}
+                </div>
+                <ul className="text-sm text-gray-500 space-y-1 mt-auto">
+                  <li>✓ Module(s) Heatzy inclus</li>
+                  <li>✓ Installation & configuration</li>
+                  <li>✓ Déplacement IDF inclus</li>
+                </ul>
+                <p className="text-xs text-center text-gray-400 mt-4">Apple Pay · Google Pay · Stripe Link</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
