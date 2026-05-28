@@ -665,7 +665,7 @@ function App() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-xl font-bold mb-4">DEERA</h3>
-              <p className="text-gray-300">Votre maison qui vous simplifie la vie</p>
+              <p className="text-gray-300">La maison intelligente, enfin accessible</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Navigation</h4>
