@@ -5,6 +5,7 @@ import Logo from './components/Logo';
 
 const WHATSAPP_URL = 'https://wa.me/message/JEQTCLRQLN5SF1';
 const WHATSAPP_CONTACT_URL = 'https://wa.me/33769537773?text=Bonjour%2C%20je%20souhaite%20en%20savoir%20plus%20sur%20vos%20services%20domotique';
+const GFORM_URL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSc5f_64YB4PiQ_efHM3Cb1krIwb7CT9q6cZKIZFG4jX441tHw/formResponse';
 
 // Encode les espaces dans les chemins de photos
 const photoUrl = (path: string) => path.split('/').map((s, i) => i === 0 ? s : encodeURIComponent(s)).join('/');
@@ -84,6 +85,32 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [lightbox, setLightbox] = useState<{ projectIndex: number; photoIndex: number } | null>(null);
+  const [formData, setFormData] = useState({ nom: '', prenom: '', telephone: '', email: '', typeBien: '', projet: '' });
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus('sending');
+    const body = new URLSearchParams({
+      'entry.1073040719': formData.nom,
+      'entry.35517058': formData.prenom,
+      'entry.1935145690': formData.telephone,
+      'entry.2136467962': formData.email,
+      'entry.1905246657': formData.typeBien,
+      'entry.1919923735': formData.projet,
+    });
+    try {
+      await fetch(GFORM_URL, { method: 'POST', mode: 'no-cors', body });
+      setFormStatus('success');
+      setFormData({ nom: '', prenom: '', telephone: '', email: '', typeBien: '', projet: '' });
+    } catch {
+      setFormStatus('error');
+    }
+  };
 
   const closeLightbox = () => setLightbox(null);
   const lightboxPrev = () => setLightbox(lb => lb ? {
@@ -466,31 +493,148 @@ function App() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-4">Discutons de votre projet</h2>
           <p className="text-center text-gray-500 mb-12">Réponse rapide garantie — on vous rappelle dans la journée.</p>
-          <div className="max-w-lg mx-auto">
-            <div className="bg-gray-50 rounded-2xl shadow-lg p-10 text-center">
-              {/* Icône WhatsApp */}
-              <div className="flex justify-center mb-6">
-                <div className="bg-[#25D366] rounded-full p-5 shadow-md">
-                  <WhatsAppIcon className="w-12 h-12 text-white" />
+          <div className="max-w-2xl mx-auto">
+            {formStatus === 'success' ? (
+              <div className="bg-green-50 border border-green-200 rounded-2xl p-12 text-center">
+                <div className="text-5xl mb-4">✅</div>
+                <h3 className="text-2xl font-bold text-green-800 mb-2">Message envoyé !</h3>
+                <p className="text-green-700 mb-6">On vous recontacte très vite. En attendant, vous pouvez aussi nous écrire directement sur WhatsApp.</p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button
+                    onClick={() => setFormStatus('idle')}
+                    className="px-6 py-3 rounded-full border border-green-400 text-green-700 font-medium hover:bg-green-100 transition-colors"
+                  >
+                    Envoyer un autre message
+                  </button>
+                  <a
+                    href={WHATSAPP_CONTACT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white px-6 py-3 rounded-full font-medium transition-colors"
+                  >
+                    <WhatsAppIcon className="w-5 h-5" />
+                    WhatsApp
+                  </a>
                 </div>
               </div>
-              <h3 className="text-2xl font-bold mb-3">Écrivez-nous sur WhatsApp</h3>
-              <p className="text-gray-500 mb-10">
-                Posez vos questions, décrivez votre maison,<br />
-                demandez un devis. On s'occupe de tout,<br />
-                sans jargon technique.
-              </p>
-              <a
-                href={WHATSAPP_CONTACT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] active:bg-[#17a852] text-white text-xl font-bold px-10 py-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 w-full justify-center"
-              >
-                <WhatsAppIcon className="w-7 h-7" />
-                Discutons de votre projet
-              </a>
-              <p className="text-gray-400 text-sm mt-4">Un message suffit. Pas d'engagement.</p>
-            </div>
+            ) : (
+              <div className="bg-gray-50 rounded-2xl shadow-lg p-8">
+                <form onSubmit={handleFormSubmit} className="space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                      <input
+                        type="text"
+                        name="nom"
+                        value={formData.nom}
+                        onChange={handleFormChange}
+                        required
+                        placeholder="Dupont"
+                        className="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deera-purple/40 focus:border-deera-purple transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                      <input
+                        type="text"
+                        name="prenom"
+                        value={formData.prenom}
+                        onChange={handleFormChange}
+                        required
+                        placeholder="Jean"
+                        className="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deera-purple/40 focus:border-deera-purple transition-colors"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
+                      <input
+                        type="tel"
+                        name="telephone"
+                        value={formData.telephone}
+                        onChange={handleFormChange}
+                        required
+                        placeholder="06 12 34 56 78"
+                        className="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deera-purple/40 focus:border-deera-purple transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleFormChange}
+                        required
+                        placeholder="jean@exemple.fr"
+                        className="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deera-purple/40 focus:border-deera-purple transition-colors"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Type de bien *</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {['Appartement', 'Maison', 'Bureau', 'Autre'].map(type => (
+                        <label
+                          key={type}
+                          className={`flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all text-sm font-medium ${
+                            formData.typeBien === type
+                              ? 'border-deera-purple bg-deera-purple/10 text-deera-purple'
+                              : 'border-gray-200 text-gray-600 hover:border-deera-purple/40'
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="typeBien"
+                            value={type}
+                            checked={formData.typeBien === type}
+                            onChange={handleFormChange}
+                            className="sr-only"
+                            required
+                          />
+                          {type}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Décrivez votre projet *</label>
+                    <textarea
+                      name="projet"
+                      value={formData.projet}
+                      onChange={handleFormChange}
+                      required
+                      rows={4}
+                      placeholder="Ex : Je voudrais automatiser les lumières et les volets de mon appartement de 80m²..."
+                      className="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deera-purple/40 focus:border-deera-purple transition-colors resize-none"
+                    />
+                  </div>
+                  {formStatus === 'error' && (
+                    <p className="text-red-600 text-sm text-center">Une erreur s'est produite. Essayez via WhatsApp directement.</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={formStatus === 'sending'}
+                    className="w-full bg-deera-purple hover:bg-deera-blue disabled:opacity-60 text-white text-lg font-semibold py-4 rounded-xl transition-colors shadow-md hover:shadow-lg"
+                  >
+                    {formStatus === 'sending' ? 'Envoi en cours...' : 'Envoyer ma demande'}
+                  </button>
+                </form>
+                <div className="mt-6 pt-6 border-t border-gray-200 text-center">
+                  <p className="text-gray-400 text-sm mb-3">Vous préférez une réponse immédiate ?</p>
+                  <a
+                    href={WHATSAPP_CONTACT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white px-6 py-3 rounded-full font-medium transition-colors text-sm"
+                  >
+                    <WhatsAppIcon className="w-5 h-5" />
+                    Écrire sur WhatsApp
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
