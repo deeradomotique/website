@@ -280,7 +280,7 @@ function App() {
       <section id="accueil" className="pt-20 bg-gradient-to-br from-deera-purple to-deera-blue text-white">
         <div className="container mx-auto px-4 py-32">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6">Votre maison qui vous simplifie la vie</h1>
+            <h1 className="text-5xl font-bold mb-6">La maison intelligente, enfin accessible</h1>
             <p className="text-xl mb-10">Lumières, chauffage, sécurité, volets... On automatise tout pour que vous n'y pensiez plus jamais.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
