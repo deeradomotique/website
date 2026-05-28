@@ -87,9 +87,29 @@ function App() {
   const [lightbox, setLightbox] = useState<{ projectIndex: number; photoIndex: number } | null>(null);
   const [formData, setFormData] = useState({ nom: '', prenom: '', telephone: '', email: '', typeBien: '', projet: '' });
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [showCallback, setShowCallback] = useState(false);
+  const [callbackData, setCallbackData] = useState({ prenom: '', telephone: '' });
+  const [callbackStatus, setCallbackStatus] = useState<'idle' | 'sending' | 'success'>('idle');
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleCallbackSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCallbackStatus('sending');
+    const body = new URLSearchParams({
+      'entry.35517058': callbackData.prenom,
+      'entry.1935145690': callbackData.telephone,
+      'entry.1919923735': 'Demande de rappel gratuit',
+    });
+    try {
+      await fetch(GFORM_URL, { method: 'POST', mode: 'no-cors', body });
+      setCallbackStatus('success');
+      setCallbackData({ prenom: '', telephone: '' });
+    } catch {
+      setCallbackStatus('idle');
+    }
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -738,6 +758,81 @@ function App() {
           </div>
         );
       })()}
+
+      {/* Floating Callback Tab */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex items-center">
+        {/* Mini form panel */}
+        <div
+          className={`transition-all duration-300 ease-in-out overflow-hidden ${
+            showCallback ? 'w-72 opacity-100' : 'w-0 opacity-0'
+          }`}
+        >
+          <div className="bg-white rounded-l-2xl shadow-2xl border border-gray-100 p-5 w-72">
+            {callbackStatus === 'success' ? (
+              <div className="text-center py-4">
+                <div className="text-4xl mb-3">📞</div>
+                <p className="font-semibold text-gray-800 mb-1">On vous rappelle !</p>
+                <p className="text-gray-500 text-sm mb-4">Sous 24h en jours ouvrés.</p>
+                <button
+                  onClick={() => { setCallbackStatus('idle'); setShowCallback(false); }}
+                  className="text-deera-purple text-sm font-medium hover:underline"
+                >
+                  Fermer
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-gray-800">Rappel gratuit</h3>
+                  <button onClick={() => setShowCallback(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="text-gray-500 text-xs mb-4">Laissez votre numéro, on vous rappelle sous 24h.</p>
+                <form onSubmit={handleCallbackSubmit} className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Prénom"
+                    value={callbackData.prenom}
+                    onChange={e => setCallbackData(p => ({ ...p, prenom: e.target.value }))}
+                    required
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deera-purple/30 focus:border-deera-purple transition-colors"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Téléphone"
+                    value={callbackData.telephone}
+                    onChange={e => setCallbackData(p => ({ ...p, telephone: e.target.value }))}
+                    required
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deera-purple/30 focus:border-deera-purple transition-colors"
+                  />
+                  <button
+                    type="submit"
+                    disabled={callbackStatus === 'sending'}
+                    className="w-full bg-deera-purple hover:bg-deera-blue disabled:opacity-60 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors"
+                  >
+                    {callbackStatus === 'sending' ? 'Envoi...' : 'Je veux être rappelé'}
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+        {/* Tab button */}
+        <button
+          onClick={() => { setShowCallback(!showCallback); setCallbackStatus('idle'); }}
+          className="bg-deera-purple hover:bg-deera-blue text-white px-3 py-5 rounded-l-xl shadow-lg transition-colors flex flex-col items-center gap-2 flex-shrink-0"
+          aria-label="Demander un rappel gratuit"
+        >
+          <Phone className="w-4 h-4" />
+          <span
+            className="text-xs font-bold tracking-wider"
+            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+          >
+            Rappel gratuit
+          </span>
+        </button>
+      </div>
 
       {/* Floating WhatsApp Button */}
       <a
