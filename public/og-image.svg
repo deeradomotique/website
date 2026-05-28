@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0c29"/>
+      <stop offset="60%" style="stop-color:#1e1b4b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#5746e3"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fond -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- Cercle décoratif flou haut-gauche -->
+  <circle cx="100" cy="100" r="200" fill="#5746e3" opacity="0.08"/>
+  <!-- Cercle décoratif bas-droite -->
+  <circle cx="1150" cy="580" r="180" fill="#3b82f6" opacity="0.07"/>
+
+  <!-- ── COLONNE GAUCHE : Branding ── -->
+
+  <!-- Logo texte DEERA -->
+  <text x="80" y="118" font-family="Arial Black, Arial, sans-serif" font-size="80" font-weight="900" fill="white" letter-spacing="-2">DEERA</text>
+  <!-- Trait accent -->
+  <rect x="80" y="132" width="140" height="5" fill="url(#accent)" rx="3"/>
+
+  <!-- Slogan -->
+  <text x="80" y="195" font-family="Arial, sans-serif" font-size="26" fill="rgba(255,255,255,0.75)">La maison intelligente,</text>
+  <text x="80" y="230" font-family="Arial, sans-serif" font-size="26" fill="rgba(255,255,255,0.75)">enfin accessible.</text>
+
+  <!-- Séparateur -->
+  <rect x="80" y="270" width="460" height="1" fill="rgba(255,255,255,0.1)"/>
+
+  <!-- Infos -->
+  <text x="80" y="308" font-family="Arial, sans-serif" font-size="18" fill="rgba(255,255,255,0.45)">Expert domotique · Paris &amp; Île-de-France</text>
+  <text x="80" y="338" font-family="Arial, sans-serif" font-size="18" fill="rgba(255,255,255,0.45)">Installation sur mesure · Matériel inclus</text>
+
+  <!-- Maison connectée icon (simplified) -->
+  <g transform="translate(80, 400)">
+    <polygon points="55,0 110,50 0,50" fill="#5746e3" opacity="0.9"/>
+    <rect x="15" y="48" width="80" height="55" fill="#5746e3" opacity="0.9" rx="3"/>
+    <rect x="38" y="66" width="34" height="37" fill="#0f0c29" rx="3"/>
+    <circle cx="55" cy="0" r="10" fill="#22c55e" stroke="white" stroke-width="3"/>
+  </g>
+
+  <!-- Paiement -->
+  <text x="80" y="590" font-family="Arial, sans-serif" font-size="15" fill="rgba(255,255,255,0.3)">Apple Pay · Google Pay · Stripe Link · Carte bancaire</text>
+
+  <!-- ── COLONNE DROITE : Packs ── -->
+  <rect x="640" y="50" width="510" height="535" fill="rgba(255,255,255,0.04)" rx="24" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+  <!-- Titre packs -->
+  <text x="700" y="118" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white">Nos Packs</text>
+  <text x="700" y="150" font-family="Arial, sans-serif" font-size="15" fill="rgba(255,255,255,0.45)">Matériel · Installation · Déplacement inclus</text>
+  <rect x="660" y="170" width="470" height="1" fill="rgba(255,255,255,0.08)"/>
+
+  <!-- Pack Lumière -->
+  <rect x="660" y="190" width="470" height="80" fill="rgba(255,255,255,0.05)" rx="12"/>
+  <rect x="680" y="210" width="40" height="40" fill="#f59e0b" rx="10"/>
+  <text x="682" y="237" font-family="Arial, sans-serif" font-size="22" fill="white">⚡</text>
+  <text x="735" y="227" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">Lumière Connectée</text>
+  <text x="735" y="252" font-family="Arial, sans-serif" font-size="13" fill="rgba(255,255,255,0.5)">3 points · pilotage smartphone</text>
+  <text x="1095" y="235" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="end">329€</text>
+  <text x="1095" y="255" font-family="Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.4)" text-anchor="end">TTC</text>
+
+  <!-- Pack Sonnette -->
+  <rect x="660" y="285" width="470" height="80" fill="rgba(255,255,255,0.05)" rx="12"/>
+  <rect x="680" y="305" width="40" height="40" fill="#5746e3" rx="10"/>
+  <text x="682" y="332" font-family="Arial, sans-serif" font-size="22" fill="white">🔔</text>
+  <text x="735" y="322" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">Sonnette Connectée</text>
+  <text x="735" y="347" font-family="Arial, sans-serif" font-size="13" fill="rgba(255,255,255,0.5)">Vidéo HD · voir qui sonne à distance</text>
+  <text x="1095" y="330" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="end">549€</text>
+  <text x="1095" y="350" font-family="Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.4)" text-anchor="end">TTC</text>
+
+  <!-- Pack Caméra -->
+  <rect x="660" y="380" width="470" height="80" fill="rgba(255,255,255,0.05)" rx="12"/>
+  <rect x="680" y="400" width="40" height="40" fill="#475569" rx="10"/>
+  <text x="682" y="427" font-family="Arial, sans-serif" font-size="22" fill="white">📷</text>
+  <text x="735" y="417" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">Caméra Surveillance</text>
+  <text x="735" y="442" font-family="Arial, sans-serif" font-size="13" fill="rgba(255,255,255,0.5)">Google Nest · indoor ou outdoor WiFi</text>
+  <text x="1095" y="425" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="end">449€</text>
+  <text x="1095" y="445" font-family="Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.4)" text-anchor="end">TTC</text>
+
+  <!-- Pack Chauffage -->
+  <rect x="660" y="475" width="470" height="80" fill="rgba(255,255,255,0.05)" rx="12"/>
+  <rect x="680" y="495" width="40" height="40" fill="#ea580c" rx="10"/>
+  <text x="682" y="522" font-family="Arial, sans-serif" font-size="22" fill="white">🌡️</text>
+  <text x="735" y="512" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="white">Chauffage Connecté</text>
+  <text x="735" y="537" font-family="Arial, sans-serif" font-size="13" fill="rgba(255,255,255,0.5)">Heatzy fil pilote · 1 ou 3 radiateurs</text>
+  <text x="1095" y="520" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="end">349€</text>
+  <text x="1095" y="540" font-family="Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.4)" text-anchor="end">TTC</text>
+
+</svg>
