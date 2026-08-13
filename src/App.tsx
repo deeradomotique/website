@@ -7,7 +7,7 @@ const WHATSAPP_URL = 'https://api.whatsapp.com/message/JEQTCLRQLN5SF1?autoload=1
 // ⚠️ À remplacer avec tes vrais liens une fois créés
 const STRIPE_30MIN = 'https://buy.stripe.com/9B64gzaY5cmQ1lCf519bO0e';
 const STRIPE_1H    = 'https://buy.stripe.com/5kQ7sL4zHeuYd4k0a79bO0f';
-const GCAL_BOOKING = 'https://calendar.google.com/calendar/appointments/REMPLACER_GCAL';
+const GCAL_BOOKING = 'https://calendar.app.google/WyGxVjJPRbD3KYxX6';
 const FORMSPREE_ID = 'REMPLACER_FORMSPREE_ID'; // formspree.io → New Form → copie l'ID
 
 const photoUrl = (path: string) =>
