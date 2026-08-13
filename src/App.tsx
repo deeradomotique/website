@@ -490,7 +490,8 @@ function App() {
                   <p className="text-gray-500 text-sm mt-1">Nous revenons vers vous sous 24h.</p>
                 </div>
               ) : (
-                <form onSubmit={handleEligSubmit} className="space-y-3">
+                <form onSubmit={handleEligSubmit} className="space-y-3" name="eligibilite" data-netlify="true" netlify-honeypot="bot-field">
+                  <input type="hidden" name="form-name" value="eligibilite" />
                   <div className="grid grid-cols-2 gap-3">
                     <input
                       required
