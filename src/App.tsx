@@ -8,7 +8,6 @@ const WHATSAPP_URL = 'https://api.whatsapp.com/message/JEQTCLRQLN5SF1?autoload=1
 const STRIPE_30MIN = 'https://buy.stripe.com/9B64gzaY5cmQ1lCf519bO0e';
 const STRIPE_1H    = 'https://buy.stripe.com/5kQ7sL4zHeuYd4k0a79bO0f';
 const GCAL_BOOKING = 'https://calendar.app.google/WyGxVjJPRbD3KYxX6';
-const FORMSPREE_ID = 'REMPLACER_FORMSPREE_ID'; // formspree.io → New Form → copie l'ID
 
 const photoUrl = (path: string) =>
   path.split('/').map((s, i) => (i === 0 ? s : encodeURIComponent(s))).join('/');
@@ -155,10 +154,14 @@ function App() {
     e.preventDefault();
     setEligStatus('sending');
     try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      const body = new URLSearchParams({
+        'form-name': 'eligibilite',
+        ...eligForm,
+      }).toString();
+      const res = await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...eligForm, _subject: 'Demande appel découverte DEERA' }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body,
       });
       setEligStatus(res.ok ? 'sent' : 'error');
     } catch {

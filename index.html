@@ -33,6 +33,13 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Netlify Forms : déclaration statique obligatoire pour les SPA React -->
+    <form name="eligibilite" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="nom" />
+      <input type="email" name="email" />
+      <input type="tel" name="tel" />
+      <textarea name="besoin"></textarea>
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
