@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, X, ChevronUp, Home, Shield, Star, Wifi, Server, Tv, Lock } from 'lucide-react';
+import { Menu, X, ChevronUp, Home, Shield, Star, Wifi, Server, Tv, Lock, Video, Calendar, CheckCircle, Clock } from 'lucide-react';
 import Logo from './components/Logo';
 
 const WHATSAPP_URL = 'https://api.whatsapp.com/message/JEQTCLRQLN5SF1?autoload=1&app_absent=0';
+
+// ⚠️ À remplacer avec tes vrais liens une fois créés
+const STRIPE_30MIN = 'https://buy.stripe.com/REMPLACER_30MIN';
+const STRIPE_1H    = 'https://buy.stripe.com/REMPLACER_1H';
+const GCAL_BOOKING = 'https://calendar.google.com/calendar/appointments/REMPLACER_GCAL';
+const FORMSPREE_ID = 'REMPLACER_FORMSPREE_ID'; // formspree.io → New Form → copie l'ID
 
 const photoUrl = (path: string) =>
   path.split('/').map((s, i) => (i === 0 ? s : encodeURIComponent(s))).join('/');
@@ -142,6 +148,23 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [lightbox, setLightbox] = useState<{ projectIndex: number; photoIndex: number } | null>(null);
+  const [eligForm, setEligForm] = useState({ nom: '', email: '', tel: '', besoin: '' });
+  const [eligStatus, setEligStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
+  const handleEligSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEligStatus('sending');
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ ...eligForm, _subject: 'Demande appel découverte DEERA' }),
+      });
+      setEligStatus(res.ok ? 'sent' : 'error');
+    } catch {
+      setEligStatus('error');
+    }
+  };
 
   const closeLightbox = () => setLightbox(null);
   const lightboxPrev = () =>
@@ -188,7 +211,7 @@ function App() {
               <a href="#poles"       className="text-gray-700 hover:text-deera-purple transition-colors">Expertises</a>
               <a href="#pourquoi-nous" className="text-gray-700 hover:text-deera-purple transition-colors">Pourquoi Nous</a>
               <a href="#realisations" className="text-gray-700 hover:text-deera-purple transition-colors">Réalisations</a>
-              <a href="#temoignages"  className="text-gray-700 hover:text-deera-purple transition-colors">Témoignages</a>
+              <a href="#conseil"     className="text-gray-700 hover:text-deera-purple transition-colors">Conseil en ligne</a>
               <a href="#contact"      className="text-gray-700 hover:text-deera-purple transition-colors">Contact</a>
             </nav>
 
@@ -211,7 +234,7 @@ function App() {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t">
             <div className="container mx-auto px-4 py-4 space-y-4">
-              {[['#accueil','Accueil'],['#poles','Expertises'],['#pourquoi-nous','Pourquoi Nous'],['#realisations','Réalisations'],['#temoignages','Témoignages'],['#contact','Contact']].map(([href, label]) => (
+              {[['#accueil','Accueil'],['#poles','Expertises'],['#pourquoi-nous','Pourquoi Nous'],['#realisations','Réalisations'],['#conseil','Conseil en ligne'],['#contact','Contact']].map(([href, label]) => (
                 <a key={href} href={href} onClick={() => setIsMenuOpen(false)} className="block text-gray-700 hover:text-deera-purple">{label}</a>
               ))}
               <a
@@ -422,6 +445,171 @@ function App() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Conseil à distance ── */}
+      <section id="conseil" className="py-24 bg-gradient-to-br from-deera-blue to-deera-purple text-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-14">
+            <span className="inline-block bg-white/15 text-white text-sm font-semibold px-4 py-1.5 rounded-full mb-4 tracking-wide uppercase">
+              Conseil IT à distance
+            </span>
+            <h2 className="text-3xl font-bold mb-3">Vérifiez si vous êtes éligible à un appel découverte gratuit</h2>
+            <p className="text-white/75 max-w-xl mx-auto">
+              Chaque demande est étudiée personnellement. Si votre besoin correspond à nos expertises, nous vous proposons un premier échange de 15 min sans engagement.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 items-start">
+
+            {/* Card 1 — Éligibilité gratuite */}
+            <div className="bg-white text-gray-900 rounded-2xl p-7 shadow-xl md:col-span-1 order-first">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="bg-deera-purple/10 rounded-xl p-3">
+                  <Video className="w-6 h-6 text-deera-purple" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-deera-purple uppercase tracking-wide">Sur sélection</p>
+                  <h3 className="font-bold text-lg">Appel découverte – 15 min</h3>
+                </div>
+                <span className="ml-auto bg-green-100 text-green-700 text-sm font-bold px-3 py-1 rounded-full">Gratuit</span>
+              </div>
+              <p className="text-gray-500 text-sm mb-5">
+                Remplissez ce formulaire. Nous analysons votre demande sous 24h et vous contactons si votre projet correspond à nos expertises.
+              </p>
+
+              {eligStatus === 'sent' ? (
+                <div className="text-center py-6">
+                  <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                  <p className="font-semibold text-gray-800">Demande envoyée !</p>
+                  <p className="text-gray-500 text-sm mt-1">Nous revenons vers vous sous 24h.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleEligSubmit} className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      required
+                      type="text"
+                      placeholder="Prénom & Nom"
+                      value={eligForm.nom}
+                      onChange={e => setEligForm(f => ({ ...f, nom: e.target.value }))}
+                      className="col-span-2 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-deera-purple/30"
+                    />
+                    <input
+                      required
+                      type="email"
+                      placeholder="Email"
+                      value={eligForm.email}
+                      onChange={e => setEligForm(f => ({ ...f, email: e.target.value }))}
+                      className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-deera-purple/30"
+                    />
+                    <input
+                      type="tel"
+                      placeholder="Téléphone"
+                      value={eligForm.tel}
+                      onChange={e => setEligForm(f => ({ ...f, tel: e.target.value }))}
+                      className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-deera-purple/30"
+                    />
+                  </div>
+                  <textarea
+                    required
+                    rows={3}
+                    placeholder="Décrivez votre besoin en 2 lignes…"
+                    value={eligForm.besoin}
+                    onChange={e => setEligForm(f => ({ ...f, besoin: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-deera-purple/30 resize-none"
+                  />
+                  {eligStatus === 'error' && (
+                    <p className="text-red-500 text-xs">Une erreur est survenue, réessayez.</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={eligStatus === 'sending'}
+                    className="w-full bg-deera-purple hover:bg-deera-blue text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-60"
+                  >
+                    {eligStatus === 'sending' ? 'Envoi…' : 'Vérifier mon éligibilité →'}
+                  </button>
+                </form>
+              )}
+            </div>
+
+            {/* Cards payantes */}
+            <div className="md:col-span-2 grid sm:grid-cols-2 gap-6">
+
+              {/* 30 min */}
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-7 flex flex-col">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-white/20 rounded-xl p-3">
+                    <Clock className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-white/60 text-xs uppercase tracking-wide font-semibold">Diagnostic Express</p>
+                    <h3 className="font-bold text-xl text-white">30 min</h3>
+                  </div>
+                </div>
+                <p className="text-3xl font-bold text-white mb-1">60 €<span className="text-lg font-normal text-white/60"> HT</span></p>
+                <p className="text-white/50 text-xs mb-5">Paiement sécurisé · Réservation après paiement</p>
+                <ul className="space-y-2 mb-6 flex-1">
+                  {['Une question précise résolue', 'Diagnostic réseau ou sécurité', 'Recommandations actionnables', 'Compte-rendu par email'].map(s => (
+                    <li key={s} className="flex items-center gap-2 text-sm text-white/80">
+                      <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={STRIPE_30MIN}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center bg-white text-deera-purple font-semibold py-3 rounded-xl hover:bg-gray-100 transition-colors"
+                >
+                  Réserver & payer →
+                </a>
+                <p className="text-center text-white/40 text-xs mt-3 flex items-center justify-center gap-1">
+                  <Calendar className="w-3 h-3" /> Créneau à choisir après paiement
+                </p>
+              </div>
+
+              {/* 1h */}
+              <div className="bg-white text-gray-900 rounded-2xl p-7 flex flex-col shadow-xl relative">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-deera-purple text-white text-xs font-bold px-4 py-1 rounded-full">
+                  Le plus complet
+                </span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-deera-purple/10 rounded-xl p-3">
+                    <Video className="w-6 h-6 text-deera-purple" />
+                  </div>
+                  <div>
+                    <p className="text-deera-purple text-xs uppercase tracking-wide font-semibold">Consultation</p>
+                    <h3 className="font-bold text-xl">1 heure</h3>
+                  </div>
+                </div>
+                <p className="text-3xl font-bold mb-1">120 €<span className="text-lg font-normal text-gray-400"> HT</span></p>
+                <p className="text-gray-400 text-xs mb-5">Paiement sécurisé · Réservation après paiement</p>
+                <ul className="space-y-2 mb-6 flex-1">
+                  {['Analyse complète de votre situation', 'Réseaux, cyber, domotique ou AV', 'Plan d\'action détaillé', 'Compte-rendu écrit inclus', 'Suivi par email 7 jours'].map(s => (
+                    <li key={s} className="flex items-center gap-2 text-sm text-gray-600">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={STRIPE_1H}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center bg-deera-purple hover:bg-deera-blue text-white font-semibold py-3 rounded-xl transition-colors"
+                >
+                  Réserver & payer →
+                </a>
+                <p className="text-center text-gray-400 text-xs mt-3 flex items-center justify-center gap-1">
+                  <Calendar className="w-3 h-3" /> Créneau à choisir après paiement
+                </p>
+              </div>
+
+            </div>
           </div>
         </div>
       </section>
