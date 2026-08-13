@@ -5,8 +5,8 @@ export default {
     extend: {
       colors: {
         deera: {
-          purple: '#8B008B', // Violet DEERA
-          blue: '#000080',   // Bleu marine DEERA
+          purple: '#7B2FBE',
+          blue: '#2A1F8F',
         }
       },
     },
